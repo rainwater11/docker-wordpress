@@ -89,6 +89,15 @@ if [ -n "$WORDPRESS_ACTIVATE_PLUGINS" ]; then
   runuser $WEB_USER -s /bin/sh -c "wp plugin activate $WORDPRESS_ACTIVATE_PLUGINS"
 fi
 
+# Delete plugins.
+if [ -n "$WORDPRESS_DELETE_PLUGINS" ]; then
+  for plugin in $WORDPRESS_DELETE_PLUGINS; do
+    if ! [ -d "$ROOT_DIR/wp-content/plugins/$plugin" ]; then
+      runuser $WEB_USER -s /bin/sh -c "wp plugin delete \"$plugin\""
+    fi
+  done
+fi
+
 # Activate theme. Install if it cannot be found locally.
 if [ -n "$WORDPRESS_ACTIVATE_THEME" ]; then
   if ! [ -d "$ROOT_DIR/wp-content/themes/$WORDPRESS_ACTIVATE_THEME" ]; then
